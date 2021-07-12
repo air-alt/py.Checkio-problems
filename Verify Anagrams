@@ -1,0 +1,22 @@
+def verify_anagrams(a, b):
+    aa = {}
+    bb = {}
+    for i in a.replace(" ", "").lower():
+        if i not in aa:
+            aa[i] = 0
+        aa[i] += 1
+    for j in b.replace(" ", "").lower():
+        if j not in bb:
+            bb[j] = 0
+        bb[j] += 1
+    return aa == bb
+
+
+if __name__ == '__main__':
+    print("Example:")
+    print(verify_anagrams('Programming', 'Gram Ring Mop'))
+
+    # These "asserts" are used for self-checking and not for an auto-testing
+    assert verify_anagrams('Programming', 'Gram Ring Mop') == True
+    assert verify_anagrams('Hello', 'Ole Oh') == False
+    assert verify_anagrams('Kyoto', 'Tokyo') == True
