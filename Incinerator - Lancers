@@ -1,0 +1,107 @@
+#New class - Lancers
+class Warrior:
+    health = 50
+    attack = 5
+    is_alive = True
+    defence = 0
+    vampirism = 0
+
+
+class Knight(Warrior):
+    def __init__(self):
+        self.health = Warrior.health
+        self.attack = 7
+        self.defence = Warrior.defence
+        self.vampirism =Warrior.vampirism
+        self.is_alive = Warrior.is_alive
+
+
+class Defender(Warrior):
+    def __init__(self):
+        self.health = 60
+        self.attack = 3
+        self.defence = 2
+        self.vampirism = Warrior.vampirism
+        self.is_alive = Warrior.is_alive
+
+
+class Vampire(Warrior):
+    def __init__(self):
+        self.health = 40
+        self.attack = 4
+        self.defence = Warrior.defence
+        self.vampirism = 0.5
+        self.is_alive = Warrior.is_alive
+
+class Lancer(Warrior):
+    def __init__(self):
+        self.health = Warrior.health
+        self.attack = 6
+        self.defence = Warrior.defence
+        self.vampirism =Warrior.vampirism
+        self.is_alive = Warrior.is_alive
+
+def fight_main(unit_1,unit_1next, unit_2, unit_2next):
+    while unit_1.is_alive and unit_2.is_alive:
+        if unit_1.attack > unit_2.defence:
+            unit_2.health -= unit_1.attack - unit_2.defence
+            unit_1.health += (unit_1.attack - unit_2.defence) * unit_1.vampirism
+        if type(unit_1).__name__ == "Lancer":
+            if unit_1.attack > unit_2next.defence:
+                unit_2next.health -= unit_1.attack * 0.5 - unit_2next.defence
+        if unit_2.health > 0:
+            if unit_2.attack > unit_1.defence:
+                unit_1.health -= unit_2.attack - unit_1.defence
+                unit_2.health += (unit_2.attack - unit_1.defence) * unit_2.vampirism
+            if type(unit_2).__name__ == "Lancer":
+                if unit_2.attack > unit_1next.defence:
+                    unit_1next.health -= unit_2.attack * 0.5 - unit_1next.defence
+            if unit_1.health > 0:
+                pass
+            else:
+                unit_1.is_alive = False
+        else:
+            unit_2.is_alive = False
+    return unit_1.is_alive
+
+def fight(unit_1, unit_2):
+    while unit_1.is_alive and unit_2.is_alive:
+        if unit_1.attack > unit_2.defence:
+            unit_2.health -= unit_1.attack - unit_2.defence
+            unit_1.health += (unit_1.attack - unit_2.defence) * unit_1.vampirism
+        if unit_2.health > 0:
+            if unit_2.attack > unit_1.defence:
+                unit_1.health -= unit_2.attack - unit_1.defence
+                unit_2.health += (unit_2.attack - unit_1.defence) * unit_2.vampirism
+            if unit_1.health > 0:
+                pass
+            else:
+                unit_1.is_alive = False
+        else:
+            unit_2.is_alive = False
+    return unit_1.is_alive
+
+class Army:
+    def __init__(self):
+        self.soldiers = []
+
+    def add_units(self, role, quantity):
+        for i in range(quantity):
+            i = role()
+            self.soldiers.append(i)
+
+
+class Battle:
+    def fight(self, army_1, army_2):
+        i = 0
+        j = 0
+        while i < len(army_1.soldiers) and j < len(army_2.soldiers):
+            if i == len(army_1.soldiers) - 1 or j == len(army_2.soldiers) - 1:
+                result = fight(army_1.soldiers[i], army_2.soldiers[j])
+            else:
+                result = fight_main(army_1.soldiers[i], army_1.soldiers[i+1], army_2.soldiers[j], army_2.soldiers[j+1])
+            if result:
+                j += 1
+            else:
+                i += 1
+        return result
