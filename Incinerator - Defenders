@@ -1,0 +1,66 @@
+"""In the previous mission - Army battles, you've learned how to make a battle between 2 armies. But we have only 2 types of units 
+- the Warriors and Knights. Let's add another one - the Defender. It should be the subclass of the Warrior class and have an additional 
+defense parameter, which helps him to survive longer. When another unit hits the defender, he loses a certain amount of his health according 
+to the next formula: enemy attack - self defense (if enemy attack > self defense). Otherwise, the defender doesn't lose his health.
+The basic parameters of the Defender:
+health = 60
+attack = 3
+defense = 2"""
+
+class Warrior:
+    health = 50
+    attack = 5
+    is_alive = True
+    defence = 0
+
+class Knight(Warrior):
+    def __init__(self):
+        self.health = Warrior.health
+        self.attack = 7
+        self.defence = Warrior.defence
+        self.is_alive = Warrior.is_alive
+
+class Defender(Warrior):
+    def __init__(self):
+        self.health = 60
+        self.attack = 3
+        self.defence = 2
+        self.is_alive = Warrior.is_alive
+
+def fight(unit_1, unit_2):
+    while unit_1.is_alive and unit_2.is_alive:
+        if unit_1.attack > unit_2.defence:
+            unit_2.health -= unit_1.attack - unit_2.defence
+        if unit_2.health > 0:
+            if unit_2.attack > unit_1.defence:
+                unit_1.health -= unit_2.attack - unit_1.defence
+            if unit_1.health > 0:
+                pass
+            else:
+                unit_1.is_alive = False
+        else:
+            unit_2.is_alive = False
+    return unit_1.is_alive
+
+class Army():
+    def __init__(self):
+        self.soldiers = []
+
+    def add_units(self, role, quantity):
+
+        for i in range(quantity):
+            i = role()
+            self.soldiers.append(i)
+
+
+class Battle:
+    def fight(self, army_1, army_2):
+        i = 0
+        j = 0
+        while i < len(army_1.soldiers) and j < len(army_2.soldiers):
+            result = fight(army_1.soldiers[i], army_2.soldiers[j])
+            if result:
+                j += 1
+            else:
+                i += 1
+        return result
